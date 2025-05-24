@@ -133,7 +133,6 @@ export default function Dashboard() {
                 </div>
 
                 {/* Konten Best Seller Section */}
-                {/* Konten Best Seller Section */}
                 <div className="container mx-auto px-4 mt-4 mb-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {Array.from({ length: 8 }).map((_, index) => (
