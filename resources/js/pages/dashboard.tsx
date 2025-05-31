@@ -1,20 +1,37 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "@/components/ui/carousel"
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { Switch } from '@/components/ui/switch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { rupiahFormatter } from "@/lib/utils";
+
+interface Props {
+    products: {
+        id: number;
+        name: string;
+        image: string;
+        price: number;
+        description: string;
+        category: {
+            name: string;
+        }
+    }[],
+    categories: {
+        id: number;
+        name: string;
+    }[]
+}
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/',
     },
 ];
 
-export default function Dashboard() {
+export default function Dashboard({ products, categories }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -74,8 +91,8 @@ export default function Dashboard() {
                 <div className="relative flex-1 overflow-hidden p-4 w-full">
                     <Carousel opts={{ align: "start", loop: true }} className="w-full max-w-xl mx-auto">
                         <CarouselContent>
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <CarouselItem key={index} className="basis-1/1 md:basis-1/2 lg:basis-3/5">
+                            {categories.map((category) => (
+                                <CarouselItem key={category.id} className="basis-1/1 md:basis-1/2 lg:basis-3/5">
                                     <div className="p-8 md:p-1">
                                         <Card>
                                             <CardContent className="flex flex-col aspect-square p-4">
@@ -83,21 +100,21 @@ export default function Dashboard() {
                                                     {/* Div 1: Nama Kategori (kiri atas) */}
                                                     <div className="text-left">
                                                         <span className="inline-block bg-lime-300 text-gray-900 px-3 py-1 rounded-xl text-sm font-semibold">
-                                                            Kategori {index + 1}
+                                                            {category.name}
                                                         </span>
                                                     </div>
                                                     {/* Div 2: Gambar */}
                                                     <div className="flex-grow flex items-center justify-center min-h-[150px]">
                                                         <img
-                                                            src={`assets/images/sepatu-${(index % 5) + 1}.png`}
-                                                            alt={`Sepatu Kategori ${index + 1}`}
+                                                            src={'/assets/images/placeholder.png'}
+                                                            alt={category.name}
                                                             className="max-h-[150px] object-contain"
                                                         />
                                                     </div>
                                                     {/* Div 3: Button */}
                                                     <div className="flex justify-center mt-auto">
                                                         <Button className="bg-lime-400 text-gray-900 font-bold hover:bg-lime-600 rounded-xl w-full" size="sm" >
-                                                            Lihat Detail
+                                                            Lihat Kategori
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -135,8 +152,8 @@ export default function Dashboard() {
                 {/* Konten Best Seller Section */}
                 <div className="container mx-auto px-4 mt-4 mb-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {Array.from({ length: 8 }).map((_, index) => (
-                            <Card key={index} className="h-full overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                        {products.map((product) => (
+                            <Card key={product.id} className="h-full overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
                                 <div className="relative">
                                     {/* Badge Best Seller */}
                                     <div className="absolute top-2 right-2 z-10">
@@ -147,8 +164,8 @@ export default function Dashboard() {
                                     {/* Gambar Produk */}
                                     <div className="h-48 flex items-center justify-center p-4">
                                         <img
-                                            src={`assets/images/sepatu-${(index % 5) + 1}.png`}
-                                            alt={`Sepatu Popular ${index + 1}`}
+                                            src={product.image ? `/storage/${product.image}` : '/assets/images/placeholder.png'}
+                                            alt={product.name}
                                             className="h-full object-contain"
                                         />
                                     </div>
@@ -156,29 +173,27 @@ export default function Dashboard() {
                                 <CardContent className="p-4">
                                     {/* Nama Produk */}
                                     <h3 className="text-lg font-semibold mb-1 line-clamp-1">
-                                        Sepatu Trendy {index + 1} Edition
+                                        {product.name}
                                     </h3>
 
                                     {/* Deskripsi Singkat */}
                                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                                        Sepatu nyaman dengan desain modern, cocok untuk aktivitas sehari-hari.
+                                        {product.description}
                                     </p>
 
                                     {/* Harga */}
                                     <div className="flex items-center justify-between mb-4">
                                         <span className="text-xl font-bold text-gray-900">
-                                            Rp {(299000 + index * 50000).toLocaleString('id-ID')}
+                                            {rupiahFormatter.format(product.price)}
                                         </span>
-                                        {index % 3 === 0 && (
                                             <span className="text-sm line-through text-gray-500">
-                                                Rp {(399000 + index * 50000).toLocaleString('id-ID')}
+                                                {rupiahFormatter.format(product.price * 1.5)}
                                             </span>
-                                        )}
                                     </div>
 
                                     {/* Button Checkout */}
                                     <Button className="w-full bg-lime-400 text-gray-900 font-semibold hover:bg-lime-500 rounded-xl">
-                                        Checkout
+                                        <Link href={route('dashboard.detail', product.id)}>Lihat Detail</Link>
                                     </Button>
                                 </CardContent>
                             </Card>

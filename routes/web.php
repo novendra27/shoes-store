@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Support\Facades\Route;
@@ -11,9 +12,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{id}', [DashboardController::class, 'detail'])->name('dashboard.detail');
 });
 
 Route::middleware(['auth', EnsureAdmin::class])->group(function () {
