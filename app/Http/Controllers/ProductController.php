@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,8 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::with('category')->latest()->get();
-        $products = Product::latest()->get();
+        $products = Product::with('category')->latest()->get();
         return Inertia::render('admin/products/index', [
             'products' => $products,
         ]);
@@ -26,11 +26,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        // $categories = Category::all();
-        // return Inertia::render('admin/products/create', [
-        //     'categories' => $categories,
-        // });
-        return Inertia::render('admin/products/create');
+        $categories = Category::all();
+        return Inertia::render('admin/products/create', [
+            'categories' => $categories,
+        ]);
+        // return Inertia::render('admin/products/create');
     }
 
     /**
@@ -39,6 +39,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -71,9 +72,10 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
-        // $categories = Category::all();
+        $categories = Category::all();
         return Inertia::render('admin/products/edit', [
             'product' => $product,
+            'categories' => $categories,
         ]);
     }
 
@@ -83,6 +85,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -98,6 +101,7 @@ class ProductController extends Controller
             $imagePath = $image->store('products', 'public');
             
             $product->update([
+                'category_id' => $request->category_id,
                 'image' => $imagePath,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -106,6 +110,7 @@ class ProductController extends Controller
             ]);
         } else {
             $product->update([
+                'category_id' => $request->category_id,
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,

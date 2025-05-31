@@ -5,6 +5,7 @@ import { Head, router } from "@inertiajs/react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { parseRupiah, rupiahFormatter } from "@/lib/utils";
@@ -12,12 +13,17 @@ import { parseRupiah, rupiahFormatter } from "@/lib/utils";
 interface Props {
     product: {
         id: number;
+        category_id: number;
         title: string;
         description: string;
         price: number;
         stock: number;
         image: string;
-    }
+    },
+    categories: {
+        id: number;
+        name: string;
+    }[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -36,6 +42,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const formSchema = z.object({
+    category_id: z.string().min(1, "Kategori tidak boleh kosong"),
     image: z.any().optional(),
     title: z.string().min(1, "Nama produk tidak boleh kosong"),
     description: z.string().min(1, "Deskripsi produk tidak boleh kosong"),
@@ -43,12 +50,13 @@ const formSchema = z.object({
     stock: z.number().min(0, "Stok produk tidak boleh kurang dari 0"),
 })
 
-export default function EditProduct({ product }: Props) {
+export default function EditProduct({ product, categories }: Props) {
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             // Isi form dengan data dari product yang diterima dari controller
+            category_id: product.category_id.toString(),
             title: product.title,
             description: product.description,
             price: product.price,
@@ -75,6 +83,30 @@ export default function EditProduct({ product }: Props) {
                     <div className="mt-4">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                <FormField
+                                    control={form.control}
+                                    name="category_id"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Kategori</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Pilih Kategori" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {categories.map((category) => (
+                                                        <SelectItem key={category.id} value={category.id.toString()}>
+                                                            {category.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 {/* Tampilkan gambar produk yang sudah ada */}
                                 <div className="mb-4">
                                     <h3 className="font-medium mb-2">Gambar Produk Saat Ini:</h3>
@@ -84,7 +116,6 @@ export default function EditProduct({ product }: Props) {
                                         className="w-32 h-32 object-cover rounded-md border"
                                     />
                                 </div>
-
                                 <FormField
                                     control={form.control}
                                     name="image"

@@ -8,14 +8,7 @@ import { Link } from "@inertiajs/react"
 
 export type Product = {
   id: string
-  title: string
-  description: string
-  price: number
-  stock: number
-  image: string | null
-  category: {
-    name: string
-  }
+  name: string
 }
 
 export const columns: ColumnDef<Product>[] = [
@@ -29,42 +22,8 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: 'title',
-    header: 'Nama Produk',
-  },
-  {
-    accessorKey: 'category.name',
-    header: 'Kategori',
-  },
-  {
-    accessorKey: 'description',
-    header: 'Deskripsi',
-  },
-  {
-    accessorKey: 'price',
-    header: 'Harga',
-    cell: ({ row }) => {
-      const price = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-      }).format(price);
-      return <div className="font-medium">{formatted}</div>
-    }
-  },
-  {
-    accessorKey: 'stock',
-    header: 'Stok',
-  },
-  {
-    accessorKey: 'image',
-    header: 'Gambar',
-    cell: ({ row }) => {
-      const title = row.original.title
-      const image = row.original.image
-      const imageUrl = image ? `/storage/${image}` : '/assets/images/placeholder.png'
-      return <img src={imageUrl} alt={title} className="h-16 w-16 rounded object-cover" />
-    },
+    accessorKey: 'name',
+    header: 'Nama Kategori',
   },
   {
     id: 'actions',
@@ -83,14 +42,14 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Button asChild variant={"ghost"}>
-                <Link href={route('products.edit', product.id)}>
+                <Link href={route('categories.edit', product.id)}>
                   <Pencil className="h-4 w-4" /> Edit
                 </Link>
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive focus:text-destructive">
               <Button asChild variant={"ghost"}>
-                <Link method="delete" href={route('products.destroy', product.id)}>
+                <Link method="delete" href={route('categories.destroy', product.id)}>
                   <Trash2 className="h-4 w-4" /> Hapus
                 </Link>
               </Button>
