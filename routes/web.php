@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,7 +20,9 @@ Route::middleware(['auth', EnsureAdmin::class])->group(function () {
         return Inertia::render('admin/dashboard');
     })->name('admin.dashboard');
 
-    // Route::resource(('admin/products'), ProductController::class);
+    Route::resource(('admin/products'), ProductController::class);
+    // Route::resource(('admin/categories'), CategoryController::class);
+    
 });
 
 require __DIR__.'/settings.php';

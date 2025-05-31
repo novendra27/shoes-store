@@ -5,7 +5,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Switch } from '@/components/ui/switch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,8 +37,8 @@ export default function Dashboard() {
                                     Tambahkan Produk Anda ke dalam sistem kami dan nikmati kemudahan dalam mengelola inventaris Anda.
                                 </p>
                                 <div className="grid lg:block pb-5">
-                                    <Button className="bg-black text-white py-3 lg:py-2 px-5 rounded-2xl" size={'lg'}>
-                                        Lihat Produk
+                                    <Button asChild className="bg-black text-white py-3 lg:py-2 px-5 rounded-2xl" size={'lg'}>
+                                        <Link href={route('products.index')}>Lihat Produk</Link>
                                     </Button>
                                 </div>
                             </div>

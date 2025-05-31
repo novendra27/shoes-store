@@ -15,7 +15,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Produk',
-        href: route('admin.dashboard'),
+        href: route('products.index'),
         icon: PackageIcon,
     },
 ];
@@ -40,7 +40,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
+                {/* <NavFooter items={footerNavItems} className="mt-auto" />e */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
