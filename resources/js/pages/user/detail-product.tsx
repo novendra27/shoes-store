@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { rupiahFormatter } from "@/lib/utils";
 import { ShoppingBag, ShoppingCart, Star, Truck } from 'lucide-react';
 import { useState } from 'react';
@@ -45,6 +45,13 @@ export default function DetailProduct({ product }: Props) {
         if (quantity > 1) {
             setQuantity(quantity - 1);
         }
+    };
+
+    const addToCart = () => {
+        router.post(route('cart.store'), {
+            product_id: product.id,
+            quantity: 1
+        });
     };
 
     return (
@@ -151,6 +158,7 @@ export default function DetailProduct({ product }: Props) {
                                     <ShoppingBag className="mr-2 h-5 w-5" /> Checkout
                                 </Button>
                                 <Button
+                                    onClick={addToCart}
                                     className="flex items-center justify-center bg-lime-500 hover:bg-lime-600 text-white py-3 rounded-xl"
                                     size="lg"
                                 >

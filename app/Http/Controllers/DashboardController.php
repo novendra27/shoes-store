@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $products = Product::with('category')->latest()->get();
         $categories = Category::all();
-        return Inertia::render('dashboard', [
+        return Inertia::render('user/dashboard', [
             'products' => $products,
             'categories' => $categories,
         ]);
@@ -21,7 +21,7 @@ class DashboardController extends Controller
 
     public function detail(string $id){
         $product = Product::with('category')->findOrFail($id);
-        return Inertia::render('detail-product', [
+        return Inertia::render('user/detail-product', [
             'product' => $product,
         ]);
     }

@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Middleware\EnsureAdmin;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,8 +13,12 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard routes
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/{id}', [DashboardController::class, 'detail'])->name('dashboard.detail');
+    
+    // Cart routes
+    Route::resource('cart', CartController::class)->only(['index', 'store', 'destroy']);
 });
 
 Route::middleware(['auth', EnsureAdmin::class])->group(function () {
