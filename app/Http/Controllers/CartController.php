@@ -53,7 +53,7 @@ class CartController extends Controller
     public function getCart()
     {
         $userId =  Auth::id();
-        $cart = Cart::with('car')
+        $cart = Cart::with('product')
             ->where('user_id', $userId)
             ->where('status', 'active')
             ->get();

@@ -69,11 +69,11 @@ export default function Cart({ cartItems }: Props) {
     // Checkout semua item
     const handleCheckout = () => {
         // Implementasi checkout - bisa redirect ke halaman checkout
-        router.post(route('checkout.store'), {
-            cart_items: cartItems.map(item => ({
-                product_id: item.product.id,
-                quantity: item.quantity
-            }))
+        router.post(route('invoice.index'), {
+            // cart_items: cartItems.map(item => ({
+            //     product_id: item.product.id,
+            //     quantity: item.quantity
+            // }))
         });
     };
 
@@ -238,7 +238,7 @@ export default function Cart({ cartItems }: Props) {
                                     </div>
 
                                     <Button
-                                        onClick={handleCheckout}
+                                        onClick={() => router.get(route('invoice.index'))}
                                         className="w-full bg-lime-500 hover:bg-lime-600 text-white py-3 rounded-xl font-semibold"
                                         size="lg"
                                     >
